@@ -1,0 +1,17 @@
+{
+  "name": "scientopyui",
+  "version": "1.0.0",
+  "description": "UI version of ScientoPy",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "\\scientopy"
+  ],
+  "author": "Jesus Viveros",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^4.0.8"
+  }
+}
