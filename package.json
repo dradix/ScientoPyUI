@@ -12,6 +12,7 @@
   "author": "Jesus Viveros",
   "license": "MIT",
   "dependencies": {
-    "electron": "^4.0.8"
+    "electron": "^4.0.8",
+    "python-shell": "^1.0.7"
   }
 }
