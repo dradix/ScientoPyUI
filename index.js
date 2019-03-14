@@ -1,16 +1,19 @@
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
 const {PythonShell} = require('python-shell');
 const { app, BrowserWindow, Menu, ipcMain, dialog } = electron;
 
 let MainWindow;
 let PyShell 
-let CurrentPath;
+let CurrentDatabasePath;
+let DOCUMENTS_PATH;
 // Callback for app ready
 app.on('ready', function () {
-    MainWindow = new BrowserWindow();
-    MainWindow.setSimpleFullScreen(true);
+    MainWindow = new BrowserWindow({ width: 1280, height: 800, frame: false });
+    //MainWindow.setSimpleFullScreen(true);
+    
     MainWindow.loadURL(url.format(
         {
             pathname: path.join(__dirname, 'html', 'main_window.html'),
@@ -24,16 +27,29 @@ app.on('ready', function () {
         pythonOptions: ['-u'], // get print results in real-time          
       };
 
+    //Create directories
+    DOCUMENTS_PATH = path.join(app.getPath('documents'),'ScientoPy');
+    if (!fs.existsSync(DOCUMENTS_PATH)) {
+        fs.mkdir(DOCUMENTS_PATH, function () {
+            console.log("Error creating folder");
+        });
+    }
+
+    
     //python callbacks
-    PyShell = new PythonShell('python/task.py',options);
+    PyShell = new PythonShell(path.join(app.getAppPath(),'python','task.py'),options);
     let i = 0;
     PyShell.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
         console.log(message);
-        i+=1;
+
+     
       });
       
 });
+
+
+//function HandleResponse()
 //End App ready
 
 const MainMenuTemplate = [
@@ -79,7 +95,7 @@ ipcMain.on('open-file-dialog', (event) => {
             if (files) {
                       
                 MainWindow.webContents.send('selected-directory', files);
-                CurrentPath = files[0];
+                CurrentDatabasePath = files[0];
 
             }
         });
@@ -87,12 +103,12 @@ ipcMain.on('open-file-dialog', (event) => {
 
 ipcMain.on('start-preprocess', function (event) {    
 
-    if (CurrentPath == undefined) {
+    if (CurrentDatabasePath == undefined) {
         ShowSimpleInfoDialog("You must select a database path")
         return;
     }
     
-    CallPythonTask('preprocess', [CurrentPath])
+    CallPythonTask('preprocess', [CurrentDatabasePath, '--savePlot','preProcessed.eps','--intermediateFolder',DOCUMENTS_PATH]);
 
 });
 

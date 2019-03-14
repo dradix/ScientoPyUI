@@ -4,7 +4,8 @@
   "description": "UI version of ScientoPy",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "build"
   },
   "keywords": [
     "\\scientopy"
@@ -12,7 +13,20 @@
   "author": "Jesus Viveros",
   "license": "MIT",
   "dependencies": {
-    "electron": "^4.0.8",
+    
     "python-shell": "^1.0.7"
+  },
+  "devDependencies": {
+    "electron": "^4.0.8",
+    "electron-builder": "^20.39.0"
+  },
+
+  "build": {
+    "win": {
+      "target": "NSIS",
+      "extraResources":"python",
+      "asar": "false"
+      
+    }
   }
 }
