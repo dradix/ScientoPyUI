@@ -3,7 +3,7 @@ const SetPathButton = document.querySelector('#set-path');
 SetPathButton.addEventListener('click', (event) => {
     ipcRenderer.send('open-file-dialog')
 });
-//Callback for databse path selected
+//Callback for database path selected
 ipcRenderer.on('selected-directory', (event, path) => {
     console.log(path);
     if (path[0] != null) {
@@ -11,3 +11,11 @@ ipcRenderer.on('selected-directory', (event, path) => {
     }
 
 })
+
+
+//Start process event
+const StartProcessButton = document.querySelector('#start-preprocess');
+StartProcessButton.addEventListener('click', (event) => {
+    ipcRenderer.send('start-preprocess')
+});
+
