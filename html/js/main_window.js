@@ -1,4 +1,5 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer} = require('electron');
+
 const SetPathButton = document.querySelector('#set-path');
 SetPathButton.addEventListener('click', (event) => {
     ipcRenderer.send('open-file-dialog')

@@ -7,7 +7,8 @@ PREPROCESS = "preProcess.py"
 
 # simple JSON echo script
 for line in sys.stdin:
-    CmdList = list()    
+    CmdList = list()  
+    CmdOut= dict()  
     JsonData = json.loads(line)
     if "command" not in JsonData:
         print("Error command")
@@ -22,4 +23,5 @@ for line in sys.stdin:
     CmdList.extend(JsonData["args"])
     print(CmdList)
     subprocess.run(CmdList, shell=True, check=True)
-    print(json.dumps(JsonData["command"])) 
+    CmdOut["command"]=JsonData["command"]
+    print(json.dumps(CmdOut)) 
