@@ -1,14 +1,201 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-    <script src="main.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/analysis_window.css">
 </head>
+
 <body>
-    Heeeeeeeeeeeeeeello
+    <div class="container-fluid">
+        <div class="row vh-100">
+            <div class="analysis-menu-container vh-100">
+                <div class="projects-title"> Projects:</div>
+                <nav class="nav flex-column" id="project-list" role="tablist" aria-orientation="vertical">
+
+                </nav>
+            </div>
+            <div class="results-container">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    Preprocessed data:
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                        
+                                <div class="text-center">
+                                    <form  id="pre-process-form"> 
+                                        <div class="form-row">
+                        
+                                            <div class="col-md-3 mb-3">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="remove-duplicates-check" checked>
+                                                    <label class="form-check-label" for="remove-duplicates-check">Remove duplicates</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button type="submit" class="btn btn-primary">Preprocess Again</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                        
+                                    <figure class="figure">
+                                        <img class="figure-img img-fluid rounded" alt="pre-processed data." id="pre-processed-image">
+                                        <figcaption class="figure-caption text-right" id="pre-processed-label">
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                    aria-expanded="false" aria-controls="collapseTwo">
+                                    Analysis 1
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                               
+                                <div class="text-center">
+                                    <form  id="analysis-form"> 
+                                        <div class="form-row">
+                                                
+                                                <div class="input-group col-md-6">
+                                                  <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="criterion">Criterion</label>
+                                                  </div>
+                                                  <select class="custom-select" id="criterion">
+                                                    <option selected>Choose...</option>
+                                                    <option value="author">author</option>
+                                                    <option value="sourceTitle" >sourceTitle</option>
+                                                    <option value="subject">subject</option>
+                                                    <option value="authorKeywords">authorKeywords</option>
+                                                    <option value="indexKeywords">indexKeywords</option>
+                                                    <option value="abstract">abstract</option>
+                                                    <option value="bothKeywords">bothKeywords</option>
+                                                    <option value="documentType">documentType</option>
+                                                    <option value="dataBase">dataBase</option>
+                                                    <option value="country">country</option>
+                                                    <option value="institution">institution</option>
+                                                    <option value="institutionWithCountry">institutionWithCountry</option>
+                                                  </select>
+                                                </div>
+
+
+                                                <div class="input-group col-md-6">
+                                                        <div class="input-group-prepend">
+                                                          <label class="input-group-text" for="graph-type">GraphType</label>
+                                                        </div>
+                                                        <select class="custom-select" id="graph-type">
+                                                          <option selected>Choose...</option>
+                                                          <option value="parametric">parametric</option>
+                                                          <option value="parametric2" >parametric2</option>
+                                                          <option value="parametric3">parametric3</option>
+                                                          <option value="wordCloud">wordCloud</option>
+                                                          <option value="bar">bar</option>
+                                                          <option value="bar2">bar2</option>                                                         
+                                                        </select>
+                                                      </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-row">
+                        
+                                            <div class="col-md-3 mb-3">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="inputGroupPrepend2">StartYear</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" id="start-year"
+                                                        placeholder="StartYear" aria-describedby="inputGroupPrepend2" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroupPrepend2">EndYear</span>
+                                                        </div>
+                                                        <input type="number" class="form-control" id="end-year"
+                                                            placeholder="EndYear" aria-describedby="inputGroupPrepend2" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroupPrepend2">Year Window width</span>
+                                                        </div>
+                                                        <input type="number" class="form-control" id="year-width"
+                                                            placeholder="YearWidth" aria-describedby="inputGroupPrepend2" required>
+                                                    </div>
+                                                </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button type="submit" class="btn btn-primary">Generate Graph</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                                <div class="col-md-4 mb-4">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="trend" >
+                                                            <label class="form-check-label" for="trend">Trend</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-4">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="yLog" >
+                                                                <label class="form-check-label" for="yLog">Log. Y Axis</label>
+                                                            </div>
+                                                        </div>
+                                                       
+                                        </div>
+
+                                    
+                                    </form>
+                        
+                                    <figure class="figure">
+                                        <img class="figure-img img-fluid rounded" alt="analysis-image" id="analysis-image" hidden>
+                                        <figcaption class="figure-caption text-right" id="analysis-label">
+                                        </figcaption>
+                                    </figure>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+
+    <script src='js/analysis_window.js'></script>
 </body>
+
 </html>

@@ -1,0 +1,56 @@
+.analysis-menu-container
+{
+    width: 240px;
+    padding: 0px;
+    background-color: #e0e8ea;
+    color: #1b5675;
+    padding-top: 15px;
+    position: fixed;
+  
+}
+.project-item
+{
+    height: 30px;
+    margin-left: 15px;
+    padding-left: 15px;
+    cursor: pointer;
+    transition: color 0.3s ;  
+    transition: background-color 0.3s ;
+    border-radius: 5px 0px 0px 5px;
+}
+.project-item:hover
+{
+    height: 30px;
+    padding-left: 15px;
+    color:#e0e8ea !important ;
+    background-color: #1b5675;
+    border-radius: 5px 0px 0px 5px;
+    
+
+}
+.project-item-active
+{ height: 30px;
+    margin-left: 15px;
+    padding-left: 15px;
+    cursor: pointer;
+    border: #1b5675 solid 1px  ;
+    border-radius: 5px 0px 0px 5px;
+   
+}
+.projects-title
+{
+    height: 30px;
+    font-weight: 600;
+    font-size: 20px;    
+    margin-left:15px;
+    margin-bottom:20px;
+}
+
+.results-container
+{
+    position: relative;
+    padding: 10px;
+    display: inline-block;
+    width: calc(100% - 270px);
+    left: 240px;
+}

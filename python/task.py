@@ -1,7 +1,8 @@
 import sys, json,subprocess,os
 PATH_TO_SCIENTOPY = os.getcwd()+"\\python\\core\\ScientoPy\\"
-
+PYTHON_PATH = 'C:\\Users\\jejho\\AppData\\Local\\Programs\\Python\\Python37-32\\python'
 PREPROCESS = "preProcess.py"
+SCIENTOPY = "scientoPy.py"
 
 #the command to execute
 
@@ -18,8 +19,12 @@ for line in sys.stdin:
 
     #assign a file for the command
     if JsonData["command"] == "preprocess":
-        CmdList.extend(["python", PATH_TO_SCIENTOPY+PREPROCESS])
-
+        CmdList.extend([PYTHON_PATH, PATH_TO_SCIENTOPY+PREPROCESS])
+    if JsonData["command"] == "refresh-preprocess":
+        CmdList.extend([PYTHON_PATH, PATH_TO_SCIENTOPY+PREPROCESS])
+    if JsonData["command"] == "sciento-analiyze":
+        CmdList.extend([PYTHON_PATH, PATH_TO_SCIENTOPY+SCIENTOPY])
+        
     CmdList.extend(JsonData["args"])
     print(CmdList)
     subprocess.run(CmdList, shell=True, check=True)

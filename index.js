@@ -10,8 +10,9 @@ let AnalysisWindow;
 let PyShell
 let CurrentDatabasePath;
 let DOCUMENTS_PATH;
+let PYTHON_PATH = 'C:\\Users\\jejho\\AppData\\Local\\Programs\\Python\\Python37-32\\python'
 
-
+let CurrentProjectName;
 // Callback for app ready
 app.on('ready', function () {
     //Setup Main Window
@@ -26,6 +27,7 @@ app.on('ready', function () {
     MainWindow.setMenu(MainMenu);
     let options = {
         mode: 'text',
+        pythonPath:  PYTHON_PATH,
         pythonOptions: ['-u'], // get print results in real-time          
     };
     MainWindow.on('close', function () {
@@ -67,6 +69,12 @@ function HandleResponse(Response) {
         case 'preprocess':
             StartNewAnalysisWindow();
             break;
+        case 'refresh-preprocess':
+            RefreshPreprocessedData();
+            break;
+        case 'sciento-analiyze':
+            RefreshAnalyzedData();
+        break;
         default:
             console.log('Invalid response');
             break;
@@ -74,7 +82,21 @@ function HandleResponse(Response) {
 
 
 }
+function RefreshPreprocessedData()
+{
+    if(AnalysisWindow)
+    {
+        AnalysisWindow.webContents.send('refresh-preprocessed-data');
+    }
+}
 
+function RefreshAnalyzedData()
+{
+    if(AnalysisWindow)
+    {
+        AnalysisWindow.webContents.send('refresh-analyzed-data');
+    }
+}
 function StartNewAnalysisWindow() {
     AnalysisWindow = new BrowserWindow({ width: 1280, height: 800 });
     //MainWindow.setSimpleFullScreen(true);
@@ -86,8 +108,52 @@ function StartNewAnalysisWindow() {
             slashes: true
         }));
     AnalysisWindow.on('close', function () { AnalysisWindow = null })
+
+    AnalysisWindow.webContents.on('did-finish-load', () => {
+        AnalysisWindow.webContents.send('project-data', CurrentDatabasePath,CurrentProjectName,DOCUMENTS_PATH);
+    });
+    GetSummaryData();
     AnalysisWindow.show();
 
+}
+function tsvJSON(tsv) {
+
+    var lines = tsv.split("\n");
+
+    var result = [];
+
+    var headers = lines[0].split("\t");
+
+    for (var i = 1; i < lines.length; i++) {
+
+        var obj = {};
+        var currentline = lines[i].split("\t");
+
+        for (var j = 0; j < headers.length; j++) {
+            obj[headers[j]] = currentline[j];
+        }
+
+        result.push(obj);
+
+    }
+
+    //return result; //JavaScript object
+    return JSON.stringify(result); //JSON
+}
+function GetSummaryData() {
+    fs.readFile( path.join(DOCUMENTS_PATH,'dataPre','PreprocessedBrief.tsv'), 'utf-8', (err, data) => {
+        if (err) {
+            alert("An error ocurred reading the file :" + err.message);
+            return;
+        }
+
+        // Change how to handle the file content
+        console.log("The file content is : " + data);
+        console.log(tsvJSON(data));
+        //AnalysisWindow.webContents.send('summary-data');
+
+    });
+    let Data = { TotalLoaderPapers: 0, DuplicatedPapersFound: 0, WoSPapers: 0, ScopusPapers: 0, UniquePapers: 0 };
 }
 //End App ready
 
@@ -117,6 +183,12 @@ const MainMenuTemplate = [
                 click() {
                     MainWindow.webContents.openDevTools();
                 }
+            },
+            {
+                label: "Analysis window test",                
+                click() {
+                    StartNewAnalysisWindow();
+                }
             }
         ]
     }
@@ -140,16 +212,62 @@ ipcMain.on('open-file-dialog', (event) => {
         });
 });
 
-ipcMain.on('start-preprocess', function (event) {
+ipcMain.on('start-preprocess', function (event, Path,ProjectName) {
 
-    if (CurrentDatabasePath == undefined) {
+    console.log("path: " + Path);
+    console.log("name: " + ProjectName);
+    if (Path == undefined || Path==="") {
         ShowSimpleInfoDialog("You must select a database path")
         return;
     }
+    if (ProjectName == undefined||ProjectName==="") {
+        ShowSimpleInfoDialog("You must provide a project name")
+        return;
+    }
 
-    CallPythonTask('preprocess', [CurrentDatabasePath, '--savePlot', 'preProcessed.eps', '--intermediateFolder', DOCUMENTS_PATH]);
+    CurrentProjectName = ProjectName;
+    CurrentDatabasePath = Path;
+    CallPythonTask('preprocess', [Path, '--intermediateFolder', DOCUMENTS_PATH, '--savePlot','preProcessed.svg']);
 
 });
+
+
+//Entry point for running preprocessing again with new arguments
+ipcMain.on('refresh-preprocess', function (event, Path, RemoveDuplicates) {
+
+    let ArgList =  [Path, '--intermediateFolder', DOCUMENTS_PATH, '--savePlot', 'preProcessed.svg'];
+    if(!RemoveDuplicates)
+    {
+        ArgList.push('--noRemDupl');
+    }
+    CallPythonTask('refresh-preprocess',ArgList);
+});
+//Entry point for running preprocessing again with new arguments
+ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,PYear) {
+
+    let ArgList =  [ '--intermediateFolder', DOCUMENTS_PATH,
+    Criterion, 
+    '--savePlot', 'analysis.svg',     
+     '--'+GraphType,
+     '--startYear',StartYear,
+     '--endYear',EndYear,
+     '--windowWidth',YearWidth   
+    ];
+    if(Trend)
+    {
+        ArgList.push('--trend');
+    }
+    if(YLog)
+    {
+        ArgList.push('--yLog');
+    }
+    if(PYear)
+    {
+        ArgList.push('--pYear');
+    }
+    CallPythonTask('sciento-analiyze',ArgList);
+});
+
 
 function CallPythonTask(Command, Args) {
 

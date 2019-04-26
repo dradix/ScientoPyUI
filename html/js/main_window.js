@@ -17,6 +17,6 @@ ipcRenderer.on('selected-directory', (event, path) => {
 //Start process event
 const StartProcessButton = document.querySelector('#start-preprocess');
 StartProcessButton.addEventListener('click', (event) => {
-    ipcRenderer.send('start-preprocess')
+        ipcRenderer.send('start-preprocess', document.getElementById('database-path').value, document.getElementById('project-name').value);
 });
 
