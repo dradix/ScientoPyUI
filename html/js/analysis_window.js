@@ -15,10 +15,11 @@ let CurrentPath;
 ipcRenderer.on('project-data', (event, Path, ProjectName, IntermediateFolder, SummaryData) => {
     ProjectListContainer.innerHTML = '<a class="project-item-active project-item" id="v-pills-home-tab"> 1.' + ProjectName + '</a>';
     let d = new Date();   
-    PreProcessedImage.src=CurrentIntermediate+'\\graphs\\preProcessed.svg'+'?a'+d.getTime();
+    CurrentIntermediate = IntermediateFolder;
+    PreProcessedImage.src = CurrentIntermediate+'\\graphs\\preProcessed.svg'+'?a'+d.getTime();
     PreProcessedLabel.innerHTML = "Reprocessed data for "+ ProjectName;
     CurrentPath=Path;
-    CurrentIntermediate = IntermediateFolder;
+    
 })
 
 // Call for run preprocess python command again with new arguments
@@ -57,6 +58,9 @@ AnalysisForm.addEventListener("submit", (event) => {
     GetValueFromInput('#year-width'),
     GetCheckedFromInput('#trend'),
     GetCheckedFromInput('#yLog'),
+    GetCheckedFromInput('#onlyFirst'),    
+    GetValueFromInput('#length'),    
+    GetValueFromInput('#topics'),
     false
     );
 });

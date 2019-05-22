@@ -11,10 +11,12 @@ let PyShell
 let CurrentDatabasePath;
 let DOCUMENTS_PATH;
 let PYTHON_PATH = 'C:\\Users\\jejho\\AppData\\Local\\Programs\\Python\\Python37-32\\python'
-
 let CurrentProjectName;
 // Callback for app ready
 app.on('ready', function () {
+
+    //LoadPersistentSettings();
+
     //Setup Main Window
     MainWindow = new BrowserWindow({ width: 1280, height: 800 });
     MainWindow.loadURL(url.format(
@@ -242,17 +244,33 @@ ipcMain.on('refresh-preprocess', function (event, Path, RemoveDuplicates) {
     }
     CallPythonTask('refresh-preprocess',ArgList);
 });
+
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
 //Entry point for running preprocessing again with new arguments
-ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,PYear) {
+ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,OnlyFirst,  Length, Topics,PYear) {
 
     let ArgList =  [ '--intermediateFolder', DOCUMENTS_PATH,
-    Criterion, 
+    '--criterion', Criterion, 
     '--savePlot', 'analysis.svg',     
-     '--'+GraphType,
+     '--graphType', GraphType,
      '--startYear',StartYear,
      '--endYear',EndYear,
-     '--windowWidth',YearWidth   
+     '--windowWidth',YearWidth,
+     '--length',Length
+    
     ];
+    if(!isEmptyOrSpaces(Topics))
+    {
+        ArgList.push('--topics');
+        ArgList.push(Topics);
+    }
+    if(OnlyFirst)
+    {
+        ArgList.push('--onlyFirst');
+
+    }
     if(Trend)
     {
         ArgList.push('--trend');

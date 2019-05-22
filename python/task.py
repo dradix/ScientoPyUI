@@ -1,4 +1,5 @@
 import sys, json,subprocess,os
+#PATH_TO_SCIENTOPY = os.path.join(os.getcwd(),"python","core","ScientoPy")
 PATH_TO_SCIENTOPY = os.getcwd()+"\\python\\core\\ScientoPy\\"
 PYTHON_PATH = 'C:\\Users\\jejho\\AppData\\Local\\Programs\\Python\\Python37-32\\python'
 PREPROCESS = "preProcess.py"
