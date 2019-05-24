@@ -1,12 +1,12 @@
 const { ipcRenderer} = require('electron');
 window.Bootstrap = require('bootstrap');
-
 const ProjectListContainer = document.querySelector('#project-list');
 const PreProcessedImage = document.querySelector('#pre-processed-image');
 const PreProcessedLabel = document.querySelector('#pre-processed-label');
 const AnalyzedImage = document.querySelector('#analysis-image');
 const AnalyzedLabel = document.querySelector('#analysis-label');
 const PreprocessForm = document.querySelector('#pre-process-form');
+const ExportButton = document.querySelector('#export-button');
 const AnalysisForm = document.querySelector('#analysis-form');
 let CurrentIntermediate;
 let CurrentPath;
@@ -21,6 +21,13 @@ ipcRenderer.on('project-data', (event, Path, ProjectName, IntermediateFolder, Su
     CurrentPath=Path;
     
 })
+
+//Export button callback
+ExportButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    ipcRenderer.send('export-graph-click', GetValueFromInput('#graph-extension'));
+});
+
 
 // Call for run preprocess python command again with new arguments
 PreprocessForm.addEventListener("submit", (event) => {
@@ -37,6 +44,27 @@ PreprocessForm.addEventListener("submit", (event) => {
 ipcRenderer.on('refresh-preprocessed-data', (event) => {    
     let d = new Date();  
     PreProcessedImage.src=CurrentIntermediate+'\\graphs\\preProcessed.svg'+'?a'+d.getTime();
+})
+
+//Callback for export graph
+ipcRenderer.on('export-request', (event,File) => {    
+    ipcRenderer.send('export-graph',
+    CurrentPath,
+    GetValueFromInput('#criterion'),
+    GetValueFromInput('#graph-type'),
+    GetValueFromInput('#start-year'),
+    GetValueFromInput('#end-year'),
+    GetValueFromInput('#year-width'),
+    GetCheckedFromInput('#trend'),
+    GetCheckedFromInput('#yLog'),
+    GetCheckedFromInput('#onlyFirst'),    
+    GetValueFromInput('#length'),    
+    GetValueFromInput('#topics'),
+    GetValueFromInput('#graphTitle'),
+    GetCheckedFromInput('#previousResults'),
+    File,
+    false
+    );
 })
 
 //Callback for initial project data
@@ -61,6 +89,8 @@ AnalysisForm.addEventListener("submit", (event) => {
     GetCheckedFromInput('#onlyFirst'),    
     GetValueFromInput('#length'),    
     GetValueFromInput('#topics'),
+    GetValueFromInput('#graphTitle'),
+    GetCheckedFromInput('#previousResults'),
     false
     );
 });

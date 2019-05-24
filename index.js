@@ -199,6 +199,7 @@ const MainMenuTemplate = [
 
 // Event listeners
 
+
 ipcMain.on('open-file-dialog', (event) => {
     dialog.showOpenDialog(
         {
@@ -210,6 +211,22 @@ ipcMain.on('open-file-dialog', (event) => {
                 MainWindow.webContents.send('selected-directory', files);
                 CurrentDatabasePath = files[0];
 
+            }
+        });
+});
+
+
+//Export image given an Extension
+ipcMain.on('export-graph-click', (event, Extension) => {
+    console.log(Extension);
+    dialog.showSaveDialog(
+        {            
+            filters: [{name: 'Images', extensions: [Extension]},]
+        },
+        (files) => {
+            if (files) {
+              console.log(files);
+              AnalysisWindow.webContents.send('export-request',files);
             }
         });
 });
@@ -246,10 +263,12 @@ ipcMain.on('refresh-preprocess', function (event, Path, RemoveDuplicates) {
 });
 
 function isEmptyOrSpaces(str){
+    if (str == undefined) { return false }
     return str === null || str.match(/^ *$/) !== null;
 }
+
 //Entry point for running preprocessing again with new arguments
-ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,OnlyFirst,  Length, Topics,PYear) {
+ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,OnlyFirst,  Length, Topics,GraphTitle, PreviousResults,PYear) {
 
     let ArgList =  [ '--intermediateFolder', DOCUMENTS_PATH,
     '--criterion', Criterion, 
@@ -258,9 +277,17 @@ ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,
      '--startYear',StartYear,
      '--endYear',EndYear,
      '--windowWidth',YearWidth,
-     '--length',Length
+     '--length',Length    
     
     ];
+
+
+
+    if(!isEmptyOrSpaces(GraphTitle))
+    {
+        ArgList.push('--graphTitle');
+        ArgList.push(GraphTitle);
+    }
     if(!isEmptyOrSpaces(Topics))
     {
         ArgList.push('--topics');
@@ -269,6 +296,12 @@ ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,
     if(OnlyFirst)
     {
         ArgList.push('--onlyFirst');
+
+    }
+
+    if(PreviousResults)
+    {
+        ArgList.push('--previousResults');
 
     }
     if(Trend)
@@ -285,6 +318,66 @@ ipcMain.on('run-analysis', function (event, Path, Criterion,GraphType,StartYear,
     }
     CallPythonTask('sciento-analiyze',ArgList);
 });
+
+
+
+
+
+//This allows to export graph in supported extensions
+ipcMain.on('export-graph', function (event, Path, Criterion,GraphType,StartYear,EndYear,YearWidth,Trend,YLog,OnlyFirst,  Length, Topics,GraphTitle, PreviousResults,File, PYear) {
+
+    let ArgList =  [ '--intermediateFolder', DOCUMENTS_PATH,
+    '--criterion', Criterion, 
+    '--savePlot', File,     
+     '--graphType', GraphType,
+     '--startYear',StartYear,
+     '--endYear',EndYear,
+     '--windowWidth',YearWidth,
+     '--length',Length    
+    
+    ];
+
+
+    
+    if(!isEmptyOrSpaces(GraphTitle))
+    {
+        ArgList.push('--graphTitle');
+        ArgList.push(GraphTitle);
+    }
+    if(!isEmptyOrSpaces(Topics))
+    {
+        ArgList.push('--topics');
+        ArgList.push(Topics);
+    }
+    if(OnlyFirst)
+    {
+        ArgList.push('--onlyFirst');
+
+    }
+
+    if(PreviousResults)
+    {
+        ArgList.push('--previousResults');
+
+    }
+    if(Trend)
+    {
+        ArgList.push('--trend');
+    }
+    if(YLog)
+    {
+        ArgList.push('--yLog');
+    }
+    if(PYear)
+    {
+        ArgList.push('--pYear');
+    }
+    CallPythonTask('sciento-analiyze',ArgList);
+});
+
+
+
+
 
 
 function CallPythonTask(Command, Args) {

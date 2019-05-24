@@ -161,41 +161,58 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-6">
+                                            <div class="col-md-6 ">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="inputGroupPrepend2">Topics</span>
-                                                        <input type="text" class="form-control" id="topics"
-                                                        placeholder="Topics" aria-describedby="inputGroupPrepend2">
+                                                   
                                                     </div>
-                                         
+                                                    <input type="text" class="form-control" id="topics"
+                                                    placeholder="Topics" aria-describedby="inputGroupPrepend2">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
-                                                <div class="col-md-4 mb-4">
+                                                <div class="col-md-3 mb-3">
                                                         <div class="form-check">
                                                             <input type="checkbox" class="form-check-input" id="trend" >
                                                             <label class="form-check-label" for="trend">Trend</label>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4 mb-4">
+                                                    <div class="col-md-3 mb-3">
                                                             <div class="form-check">
                                                                 <input type="checkbox" class="form-check-input" id="yLog" >
                                                                 <label class="form-check-label" for="yLog">Log. Y Axis</label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4 mb-4">
+                                                        <div class="col-md-3 mb-3">
                                                             <div class="form-check">
                                                                 <input type="checkbox" class="form-check-input" id="onlyFirst" >
                                                                 <label class="form-check-label" for="onlyFirst">Use only first element</label>
                                                             </div>
                                                         </div>
-                                                       
+                                                        <div class="col-md-3 mb-3">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="previousResults" >
+                                                                <label class="form-check-label" for="previousResults">Use previous results</label>
+                                                            </div>
+                                                        </div>                                                       
                                         </div>
-
+                                        <br>
+                                        <div class="form-row">
+                                            <div class="col-md-9 ">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="inputGroupPrepend2">Graph Title</span>                                                   
+                                                    </div>
+                                                    <input type="text" class="form-control" id="graphTitle"
+                                                    placeholder="Graph Title" aria-describedby="inputGroupPrepend2">
+                                                </div>
+                                            </div>                                          
+                                       
+                                        </div>
                                     
                                     </form>
                         
@@ -204,6 +221,18 @@
                                         <figcaption class="figure-caption text-right" id="analysis-label">
                                         </figcaption>
                                     </figure>
+
+                                    <div class="input-group flex-nowrap">
+                        
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-outline-dark" type="button" id="export-button">Export:</button>
+                                        </div>
+                                        <select class="custom-select" id="graph-extension">                                            
+                                            <option value="eps" selected>EPS</option>
+                                            <option value="svg" >Svg</option>
+                                            <option value="png">PNG</option>                
+                                          </select>
+                                    </div>
                                 </div>
 
 
