@@ -143,7 +143,7 @@ function tsvJSON(tsv) {
     return JSON.stringify(result); //JSON
 }
 function GetSummaryData() {
-    fs.readFile( path.join(DOCUMENTS_PATH,'dataPre','PreprocessedBrief.tsv'), 'utf-8', (err, data) => {
+    fs.readFile( path.join(DOCUMENTS_PATH,'dataPre','PreprocessedBrief.csv'), 'utf-8', (err, data) => {
         if (err) {
             alert("An error ocurred reading the file :" + err.message);
             return;
