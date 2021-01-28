@@ -19,7 +19,7 @@
     "python-shell": "^1.0.7"
   },
   "devDependencies": {
-    "electron": "^4.0.8",
+    "electron": "^9.4.0",
     "electron-builder": "^20.39.0"
   },
   "build": {
